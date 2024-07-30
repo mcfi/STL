@@ -1581,6 +1581,36 @@ _NODISCARD _Ty abs(const complex<_Ty>& _Left) noexcept(_Is_unqual_fp<_Ty>) /* st
     return _Ctraits<_Ty>::hypot(_Left.real(), _Left.imag());
 }
 
+_EXPORT_STD template <>
+_NODISCARD double abs<double>(const complex<double>& _Left) noexcept(_Is_unqual_fp<double>) /* strengthened */ {
+#if defined(__clang__)
+    _Complex double _C(_Left.real(), _Left.imag());
+    return __builtin_cabs(_C);
+#else
+    return _Ctraits<double>::hypot(_Left.real(), _Left.imag());
+#endif
+}
+
+_EXPORT_STD template <>
+_NODISCARD long double abs<long double>(const complex<long double>& _Left) noexcept(_Is_unqual_fp<long double>) /* strengthened */ {
+#if defined(__clang__)
+    _Complex long double _C(_Left.real(), _Left.imag());
+    return __builtin_cabsl(_C);
+#else
+    return _Ctraits<long double>::hypot(_Left.real(), _Left.imag());
+#endif
+}
+
+_EXPORT_STD template <>
+_NODISCARD float abs<float>(const complex<float>& _Left) noexcept(_Is_unqual_fp<float>) /* strengthened */ {
+#if defined(__clang__)
+    _Complex float _C(_Left.real(), _Left.imag());
+    return __builtin_cabsf(_C);
+#else
+    return _Ctraits<float>::hypot(_Left.real(), _Left.imag());
+#endif
+}
+
 _EXPORT_STD template <class _Ty>
 _NODISCARD complex<_Ty> acos(const complex<_Ty>& _Left) noexcept(_Is_unqual_fp<_Ty>) /* strengthened */ {
     const _Ty _Arcbig     = static_cast<_Ty>(0.25) * _Ctraits<_Ty>::sqrt(_Ctraits<_Ty>::_Flt_max());
